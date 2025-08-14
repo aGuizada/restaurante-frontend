@@ -54,9 +54,9 @@ export class ProductosService {
     } else {
       // Manejar explícitamente el valor booleano
       if (prefix === 'requiere_inventario') {
-        // Convertir a booleano explícitamente
+        // Laravel espera 1 o 0 para campos booleanos en FormData
         const booleanValue = data === true || data === 'true' || data === '1' || data === 1;
-        formData.append(prefix, booleanValue ? 'true' : 'false');
+        formData.append(prefix, booleanValue ? '1' : '0');
       } else {
         formData.append(prefix, data.toString());
       }
