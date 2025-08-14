@@ -31,6 +31,9 @@
                 "input": "public"
               }
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles"]
+            },
             "styles": [
               "src/styles.scss"
             ],
@@ -62,6 +65,11 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "buildTarget": "restaurante-app:build",
+            "host": "0.0.0.0",
+            "port": 4200
+          },
           "configurations": {
             "production": {
               "buildTarget": "restaurante-app:build:production"
@@ -98,5 +106,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "f0f39fed-78fd-4557-9ade-aecad8fc296c"
   }
 }

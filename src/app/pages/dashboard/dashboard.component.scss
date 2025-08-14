@@ -1,0 +1,31 @@
+@use 'tailwindcss/base';
+@use 'tailwindcss/components';
+@use 'tailwindcss/utilities';
+
+@layer component {
+  .dashboard {
+    .stat-card {
+      @apply bg-white rounded-lg shadow p-6;
+      
+      .icon {
+        @apply p-3 rounded-full;
+      }
+    }
+
+    .activity-item {
+      @apply flex items-center justify-between p-4 bg-gray-50 rounded-lg;
+      
+      .icon {
+        @apply p-3 rounded-full;
+      }
+    }
+
+    .quick-action {
+      @apply bg-white rounded-lg shadow p-6 text-left hover:bg-gray-50 transition-colors;
+      
+      .icon {
+        @apply p-3 rounded-full mb-4;
+      }
+    }
+  }
+}

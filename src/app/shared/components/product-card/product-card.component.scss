@@ -1,0 +1,56 @@
+.product-card {
+  @apply bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300;
+  
+  .product-image {
+    @apply relative h-48;
+    
+    img {
+      @apply w-full h-full object-cover;
+    }
+
+    .category-badge {
+      @apply absolute top-4 right-4 
+             px-4 py-2 
+             bg-red-500 text-white text-sm font-bold 
+             rounded-full shadow-lg;
+    }
+  }
+  
+  .product-content {
+    @apply p-5;
+    
+    .product-title {
+      @apply text-xl font-bold text-gray-800 mb-4 truncate;
+    }
+    
+    .product-footer {
+      @apply flex items-center justify-between;
+      
+      .price-tag {
+        @apply flex items-baseline gap-1;
+        
+        .currency {
+          @apply text-lg text-gray-600 font-normal;
+        }
+        
+        .amount {
+          @apply text-3xl font-bold text-gray-900;
+        }
+      }
+      
+      .add-button {
+        @apply px-5 py-2.5
+               bg-red-500 hover:bg-red-600
+               text-white font-semibold rounded-xl
+               shadow-lg hover:shadow-xl
+               transform transition-all duration-200
+               active:scale-95
+               flex items-center gap-2;
+        
+        .material-icons {
+          @apply text-2xl;
+        }
+      }
+    }
+  }
+}

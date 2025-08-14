@@ -1,0 +1,24 @@
+<section class="ventas-container">
+  <!-- Categorías -->
+  <app-categories (categorySelected)="onCategorySelected($event)"></app-categories>
+
+  <!-- Header y Filtros -->
+  <!-- <header class="ventas-header">
+    <div class="header-content">
+      <h1 class="title">Productos Disponibles</h1>
+      <div class="search-bar">
+        <span class="material-icons search-icon">search</span>
+        <input type="text" placeholder="Buscar productos..." class="search-input">
+      </div>
+    </div>
+  </header> -->
+
+  <!-- Productos -->
+  <div class="products-grid">
+    <app-product-card 
+      *ngFor="let product of products" 
+      [product]="product"
+      (addToCart)="handleAddToCart($event)">
+    </app-product-card>
+  </div>
+</section>

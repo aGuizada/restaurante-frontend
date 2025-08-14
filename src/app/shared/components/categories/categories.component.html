@@ -1,0 +1,11 @@
+<div class="categories-section">
+  <div class="categories-grid">
+    <button *ngFor="let category of categories"
+            class="category-item"
+            [class.active]="category.id === activeCategory"
+            (click)="selectCategory(category.id)">
+      <span class="material-icons">{{category.icon}}</span>
+      <span>{{category.name}}</span>
+    </button>
+  </div>
+</div>

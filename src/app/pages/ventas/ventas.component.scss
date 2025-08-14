@@ -1,0 +1,77 @@
+.ventas-container {
+  @apply container mx-auto p-4 md:p-6 mt-16;
+
+  .categories-section {
+    @apply -mx-4 px-4 md:mx-0 md:px-0 overflow-x-auto;
+    
+    .categories-grid {
+      @apply flex gap-2 md:gap-4 md:flex-wrap min-w-min pb-2 md:pb-0;
+      
+      .category-item {
+        @apply flex flex-col items-center justify-center p-3 md:p-4 rounded-xl bg-white shadow-sm
+               hover:bg-gray-50 transition-all duration-200 min-w-[80px] md:min-w-[100px];
+        
+        &.active {
+          @apply bg-red-50 text-red-600;
+          
+          .material-icons {
+            @apply text-red-600;
+          }
+        }
+
+        .material-icons {
+          @apply text-2xl mb-2 text-gray-600;
+        }
+
+        span:not(.material-icons) {
+          @apply text-sm font-medium text-gray-700;
+        }
+      }
+    }
+  }
+
+  .ventas-header {
+    @apply mb-6 sticky top-16 bg-white/80 backdrop-blur-lg z-10 p-4 rounded-2xl;
+
+    .header-content {
+      @apply flex flex-col md:flex-row gap-4 items-center justify-between;
+
+      .title {
+        @apply text-2xl md:text-3xl font-bold text-gray-800;
+      }
+
+      .search-bar {
+        @apply relative w-full md:w-96;
+        
+        .search-icon {
+          @apply absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl;
+        }
+
+        .search-input {
+          @apply w-full pl-12 pr-4 py-3 text-lg rounded-xl border-2 border-gray-200
+                 focus:ring-4 focus:ring-red-500/20 focus:border-red-500
+                 transition-all duration-300 outline-none;
+        }
+      }
+    }
+  }
+
+  .products-grid {
+    @apply grid gap-6 md:gap-8 p-4 md:p-6;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    
+    @screen lg {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+
+    app-product-card {
+      @apply transform transition-all duration-300 hover:scale-105;
+      filter: drop-shadow(0 10px 15px rgb(0 0 0 / 0.1));
+      
+      &:hover {
+        filter: drop-shadow(0 20px 25px rgb(0 0 0 / 0.15));
+      }
+    }
+  }
+
+}

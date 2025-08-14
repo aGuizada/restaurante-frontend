@@ -1,0 +1,56 @@
+<header class="fixed right-0 top-0 left-0 md:left-64 h-16 bg-white shadow-md z-20" 
+        [class.md:left-20]="isSidebarCollapsed">
+  <div class="flex items-center justify-between h-full px-6">
+    <!-- Left side -->
+    <div class="flex items-center space-x-4">
+      <button class="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center" 
+              (click)="toggleSidebar.emit()">
+        <span class="material-icons">
+          {{ isSidebarCollapsed ? 'menu_open' : 'menu' }}
+        </span>
+      </button>
+      <h1 class="text-xl font-semibold text-gray-800">{{currentPage}}</h1>
+    </div>
+
+    <!-- Right side -->
+    <div class="flex items-center space-x-4">
+      <!-- Notifications -->
+      <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-full">
+        <span class="material-icons">notifications</span>
+        <span *ngIf="notifications.length > 0" 
+              class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
+          {{notifications.length}}
+        </span>
+      </button>
+
+      <!-- Separator -->
+      <div class="h-8 w-px bg-gray-200"></div>
+
+      <!-- User Menu -->
+      <div class="relative">
+        <div class="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 rounded-lg p-2"
+             (click)="toggleUserMenu()">
+          <img [src]="userAvatar" [alt]="userName" class="w-8 h-8 rounded-full">
+          <div>
+            <p class="text-sm font-medium text-gray-700">{{userName}}</p>
+            <p class="text-xs text-gray-500">{{userRole}}</p>
+          </div>
+          <span class="material-icons text-gray-400">expand_more</span>
+        </div>
+
+        <!-- User Menu Dropdown -->
+        <div *ngIf="isUserMenuOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+          <button (click)="goToPerfil()" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <span class="material-icons mr-2">person</span>
+            Mi Perfil
+          </button>
+          <div class="border-t border-gray-100 my-1"></div>
+          <button (click)="logout()" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <span class="material-icons mr-2">logout</span>
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

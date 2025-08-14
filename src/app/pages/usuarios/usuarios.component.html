@@ -1,0 +1,122 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Gestión de Usuarios</h1>
+    <button (click)="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+      <i class="fas fa-plus mr-2"></i>
+      Nuevo Usuario
+    </button>
+  </div>
+  <!-- Users Table -->
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngFor="let usuario of usuarios">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ usuario.name }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ usuario.email }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <span [ngClass]="getRolColor(usuario.role_id)">
+              {{ getRolNombre(usuario.role_id) }}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <span [ngClass]="getEstadoColor(usuario.estado || 'activo')">
+              {{ usuario.estado || 'activo' }}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-sm font-medium text-center">
+            <div class="flex items-center justify-center gap-2">
+              <button (click)="openModal(true, usuario)" class="p-2 rounded-lg hover:bg-blue-50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 hover:text-blue-800" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/>
+                  <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"/>
+                </svg>
+                <span class="sr-only">Editar</span>
+              </button>
+              <button (click)="toggleEstado(usuario)" class="p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" [ngClass]="usuario.estado === 'activo' ? 'text-green-600' : 'text-red-600'" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zm-7 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <span class="sr-only">{{ usuario.estado === 'activo' ? 'Desactivar' : 'Activar' }}</span>
+              </button>
+              <button (click)="deleteUsuario(usuario)" class="p-2 rounded-lg hover:bg-red-50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 hover:text-red-800" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <span class="sr-only">Eliminar</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal toggle -->
+  <button (click)="openModal()" class="fixed bottom-4 right-4 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-shadow">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+  </button>
+
+  <!-- Main modal -->
+  <div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto overflow-x-hidden" tabindex="-1" aria-hidden="true">
+    <div class="relative w-full max-w-md max-h-full">
+      <!-- Modal content -->
+      <div class="bg-white rounded-lg shadow-xl p-6">
+        <!-- Modal header -->
+        <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-900">
+            {{ isEditing ? 'Editar Usuario' : 'Nuevo Usuario' }}
+          </h3>
+          <button (click)="closeModal()" type="button" class="text-gray-400 hover:text-gray-500 rounded-lg text-sm w-8 h-8 flex justify-center items-center">
+            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+        <!-- Modal body -->
+        <form class="mt-4 space-y-4" (ngSubmit)="saveUsuario()">
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
+            <input type="text" name="name" [(ngModel)]="form.name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" required>
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" name="email" [(ngModel)]="form.email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" required>
+          </div>
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input type="password" name="password" [(ngModel)]="form.password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border" [required]="!isEditing">
+          </div>
+          <div>
+            <label for="role_id" class="block text-sm font-medium text-gray-700">Rol</label>
+            <select name="role_id" [(ngModel)]="form.role_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border">
+              <option *ngFor="let role of roles" [value]="role.id">
+                {{ role.nombre }}
+              </option>
+            </select>
+          </div>
+          <div class="flex justify-end gap-3 pt-4">
+            <button type="button" (click)="closeModal()" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              Cancelar
+            </button>
+            <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              {{ isEditing ? 'Guardar Cambios' : 'Crear Usuario' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
