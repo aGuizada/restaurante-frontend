@@ -88,6 +88,8 @@ export class ProductosComponent implements OnInit {
         imagen: producto.imagen,
         requiere_inventario: Boolean(producto.requiere_inventario)
       });
+      // Mostrar la imagen existente si la hay
+      this.imagenUrl = producto.imagen_url || undefined;
     } else {
       this.productoForm.reset();
       this.productoForm.patchValue({
@@ -95,7 +97,10 @@ export class ProductosComponent implements OnInit {
         categoria_id: 0,
         requiere_inventario: false
       });
+      this.imagenUrl = undefined;
     }
+    this.imagenFile = undefined;
+    this.selectedFile = undefined;
   }
 
   onFileSelected(event: any) {

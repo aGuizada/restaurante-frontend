@@ -8,6 +8,7 @@ export interface Producto {
   proveedor_id?: number;
   estado: 'Activo' | 'Inactivo';
   imagen?: string;
+  imagen_url?: string;
   requiere_inventario: boolean;
   created_at: string;
   updated_at: string;
