@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card.component';
 import { CategoriesComponent } from '../../shared/components/categories/categories.component';
-import { Product } from '../../shared/interfaces/product.interface';
+import { Producto } from '../../interfaces/producto.interface';
+import { ProductosService } from '../../services/productos.service';
 
 @Component({
   selector: 'app-ventas',
@@ -12,38 +13,57 @@ import { Product } from '../../shared/interfaces/product.interface';
   styleUrls: ['./ventas.component.scss']
 })
 export class VentasComponent implements OnInit {
-  products: Product[] = [
-    {
-      id: 1,
-      name: 'Hamburguesa Clásica',
-      price: 9.99,
-      image: 'assets/products/hamburger.jpg',
-      rating: 5,
-      category: 'Hamburguesas'
-    },
-    {
-      id: 2,
-      name: 'Pizza Margherita',
-      price: 12.99,
-      image: './assets/productos/pizza.jpg',
-      rating: 4,
-      category: 'Pizzas'
-    }
-  ];
+  products: Producto[] = [];
+  allProducts: Producto[] = [];
+  selectedCategoryId: number | null = null;
+  loading = false;
 
-  constructor() {}
+  constructor(private productosService: ProductosService) {}
 
   ngOnInit(): void {
-    // Aquí puedes cargar los productos desde un servicio
+    this.loadProducts();
   }
 
-  handleAddToCart(product: Product): void {
-    console.log('Producto agregado:', product);
-    // Implementar lógica de agregar al carrito
+  loadProducts(): void {
+    this.loading = true;
+    this.productosService.getProductos().subscribe({
+      next: (productos) => {
+        // Filtrar solo productos activos
+        this.allProducts = productos.filter(p => p.estado === 'Activo');
+        this.products = [...this.allProducts];
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading products:', error);
+        this.loading = false;
+      }
+    });
   }
 
-  onCategorySelected(categoryId: string): void {
+  handleAddToCart(product: Producto): void {
+    console.log('Producto agregado al carrito:', product);
+    // TODO: Implementar lógica de carrito de compras
+    // Aquí puedes agregar el producto al servicio de carrito
+  }
+
+  onCategorySelected(categoryId: number | null): void {
+    this.selectedCategoryId = categoryId;
+    
+    if (categoryId === null) {
+      // Mostrar todos los productos
+      this.products = [...this.allProducts];
+    } else {
+      // Filtrar productos por categoría
+      this.products = this.allProducts.filter(product => 
+        product.categoria_id === categoryId
+      );
+    }
+    
     console.log('Categoría seleccionada:', categoryId);
-    // Implementar filtrado por categoría
+    console.log('Productos filtrados:', this.products.length);
+  }
+
+  trackByProductId(index: number, product: Producto): number {
+    return product.id;
   }
 }

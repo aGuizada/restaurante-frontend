@@ -1,11 +1,7 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Category {
-  id: string;
-  name: string;
-  icon: string;
-}
+import { CategoriaService } from '../../../services/categoria.service';
+import { Categoria } from '../../../interfaces/categoria.interface';
 
 @Component({
   selector: 'app-categories',
@@ -14,21 +10,35 @@ interface Category {
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
-export class CategoriesComponent {
-  @Output() categorySelected = new EventEmitter<string>();
+export class CategoriesComponent implements OnInit {
+  @Output() categorySelected = new EventEmitter<number | null>();
+  
+  categorias: Categoria[] = [];
+  selectedCategoryId: number | null = null;
 
-  categories: Category[] = [
-    { id: 'all', name: 'Todos', icon: 'restaurant_menu' },
-    { id: 'burgers', name: 'Hamburguesas', icon: 'lunch_dining' },
-    { id: 'pizzas', name: 'Pizzas', icon: 'local_pizza' },
-    { id: 'drinks', name: 'Bebidas', icon: 'local_bar' },
-    { id: 'desserts', name: 'Postres', icon: 'icecream' }
-  ];
+  constructor(private categoriaService: CategoriaService) {}
 
-  activeCategory: string = 'all';
+  ngOnInit(): void {
+    this.loadCategorias();
+  }
 
-  selectCategory(categoryId: string): void {
-    this.activeCategory = categoryId;
+  loadCategorias(): void {
+    this.categoriaService.getCategorias().subscribe({
+      next: (categorias) => {
+        this.categorias = categorias;
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+      }
+    });
+  }
+
+  selectCategory(categoryId: number | null): void {
+    this.selectedCategoryId = categoryId;
     this.categorySelected.emit(categoryId);
+  }
+
+  isSelected(categoryId: number | null): boolean {
+    return this.selectedCategoryId === categoryId;
   }
 }

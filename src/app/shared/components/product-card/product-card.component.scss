@@ -1,56 +1,220 @@
-.product-card {
-  @apply bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300;
+// Modern Product Card with 4:3 aspect ratio images
+// Optimized for 6 products per row layout
+
+// Line clamp utility for text truncation
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Enhanced hover effects
+.group:hover {
+  .group-hover\:scale-110 {
+    transform: scale(1.1);
+  }
+}
+
+// Custom aspect ratio for older browsers
+.aspect-4-3 {
+  aspect-ratio: 4 / 3;
   
-  .product-image {
-    @apply relative h-48;
+  // Fallback for browsers that don't support aspect-ratio
+  @supports not (aspect-ratio: 4 / 3) {
+    position: relative;
+    
+    &::before {
+      content: '';
+      display: block;
+      padding-top: 75%; // 3/4 = 0.75 = 75%
+    }
     
     img {
-      @apply w-full h-full object-cover;
-    }
-
-    .category-badge {
-      @apply absolute top-4 right-4 
-             px-4 py-2 
-             bg-red-500 text-white text-sm font-bold 
-             rounded-full shadow-lg;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
   }
+}
+
+// Image optimization
+img {
+  // Prevent layout shift while loading
+  &[loading="lazy"] {
+    background-color: #f3f4f6;
+  }
   
-  .product-content {
-    @apply p-5;
+  // Better image rendering
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+// Badge enhancements
+.category-badge {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  // Ensure readability
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+// Button enhancements
+button {
+  // Prevent text selection
+  user-select: none;
+  -webkit-user-select: none;
+  
+  // Better touch targets on mobile
+  min-height: 32px;
+  min-width: 32px;
+  
+  // Loading state (if needed)
+  &.loading {
+    position: relative;
+    color: transparent;
     
-    .product-title {
-      @apply text-xl font-bold text-gray-800 mb-4 truncate;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 16px;
+      margin: -8px 0 0 -8px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
     }
+  }
+}
+
+// Price styling enhancements
+.price-display {
+  // Prevent price from wrapping
+  white-space: nowrap;
+  
+  // Ensure consistent baseline alignment
+  display: flex;
+  align-items: baseline;
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  // 2 columns on mobile
+  .product-grid-mobile {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  
+  // Smaller text on mobile
+  .text-xs {
+    font-size: 0.6875rem; // 11px
+  }
+  
+  .text-sm {
+    font-size: 0.75rem; // 12px
+  }
+  
+  // Smaller padding on mobile
+  .p-3 {
+    padding: 0.5rem;
+  }
+  
+  // Smaller buttons on mobile
+  button {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.6875rem;
     
-    .product-footer {
-      @apply flex items-center justify-between;
-      
-      .price-tag {
-        @apply flex items-baseline gap-1;
-        
-        .currency {
-          @apply text-lg text-gray-600 font-normal;
-        }
-        
-        .amount {
-          @apply text-3xl font-bold text-gray-900;
-        }
-      }
-      
-      .add-button {
-        @apply px-5 py-2.5
-               bg-red-500 hover:bg-red-600
-               text-white font-semibold rounded-xl
-               shadow-lg hover:shadow-xl
-               transform transition-all duration-200
-               active:scale-95
-               flex items-center gap-2;
-        
-        .material-icons {
-          @apply text-2xl;
-        }
-      }
+    svg {
+      width: 0.75rem;
+      height: 0.75rem;
     }
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  // 3 columns on small tablets
+  .product-grid-tablet {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  // 4 columns on tablets
+  .product-grid-desktop-small {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  // 5 columns on small desktop
+  .product-grid-desktop {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 1281px) {
+  // 6 columns on large desktop
+  .product-grid-large {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+// Animation keyframes
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Focus states for accessibility
+button:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .bg-white {
+    background-color: #ffffff !important;
+    border: 1px solid #000000 !important;
+  }
+  
+  .text-gray-900 {
+    color: #000000 !important;
+  }
+  
+  .text-gray-600 {
+    color: #333333 !important;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// Print styles
+@media print {
+  .group {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+  
+  button {
+    display: none !important;
+  }
+  
+  .shadow-sm,
+  .shadow-lg {
+    box-shadow: none !important;
   }
 }

@@ -1,11 +1,28 @@
-<div class="categories-section">
-  <div class="categories-grid">
-    <button *ngFor="let category of categories"
-            class="category-item"
-            [class.active]="category.id === activeCategory"
-            (click)="selectCategory(category.id)">
-      <span class="material-icons">{{category.icon}}</span>
-      <span>{{category.name}}</span>
+<div class="categories-container">
+  
+  
+  <div class="categories-list">
+    <!-- Opción "Todas las categorías" -->
+    <button 
+      class="category-item"
+      [class.active]="isSelected(null)"
+      (click)="selectCategory(null)">
+      <div class="category-icon">
+        <span class="material-icons">restaurant_menu</span>
+      </div>
+      <span class="category-name">Todas</span>
+    </button>
+
+    <!-- Categorías dinámicas -->
+    <button 
+      *ngFor="let categoria of categorias"
+      class="category-item"
+      [class.active]="isSelected(categoria.id)"
+      (click)="selectCategory(categoria.id)">
+      <div class="category-icon">
+        <span class="material-icons">category</span>
+      </div>
+      <span class="category-name">{{ categoria.nombre }}</span>
     </button>
   </div>
 </div>

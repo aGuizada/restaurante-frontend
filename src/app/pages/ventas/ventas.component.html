@@ -1,24 +1,53 @@
-<section class="ventas-container">
-  <!-- Categorías -->
-  <app-categories (categorySelected)="onCategorySelected($event)"></app-categories>
+<section class="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 px-4 py-8 lg:px-8">
+  <div class="mx-auto max-w-7xl">
+    <!-- Categorías -->
+    <div class="mb-8">
+      <app-categories (categorySelected)="onCategorySelected($event)"></app-categories>
+    </div>
 
-  <!-- Header y Filtros -->
-  <!-- <header class="ventas-header">
-    <div class="header-content">
-      <h1 class="title">Productos Disponibles</h1>
-      <div class="search-bar">
-        <span class="material-icons search-icon">search</span>
-        <input type="text" placeholder="Buscar productos..." class="search-input">
+
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex min-h-[400px] flex-col items-center justify-center space-y-6">
+      <div class="relative">
+        <div class="h-16 w-16 animate-spin rounded-full border-4 border-gray-200 border-t-black"></div>
+        <div class="absolute inset-0 h-16 w-16 animate-pulse rounded-full bg-gray-100/50"></div>
+      </div>
+      <div class="text-center">
+        <p class="text-xl font-medium text-slate-700">Cargando productos...</p>
+        <p class="text-sm text-slate-500">Preparando la mejor experiencia para ti</p>
       </div>
     </div>
-  </header> -->
 
-  <!-- Productos -->
-  <div class="products-grid">
+    <!-- Empty State -->
+    <div *ngIf="!loading && products.length === 0" class="flex min-h-[400px] flex-col items-center justify-center space-y-6">
+      <div class="rounded-full bg-gradient-to-br from-slate-100 to-slate-200 p-8 shadow-lg">
+        <span class="material-icons text-6xl text-slate-400">inventory_2</span>
+      </div>
+      <div class="text-center space-y-3">
+        <h3 class="text-2xl font-bold text-slate-800">No hay productos disponibles</h3>
+        <p *ngIf="selectedCategoryId === null" class="text-slate-600 max-w-md">
+          No se encontraron productos activos en este momento.
+        </p>
+        <p *ngIf="selectedCategoryId !== null" class="text-slate-600 max-w-md">
+          No hay productos disponibles en esta categoría.
+        </p>
+        <div class="mt-6">
+          <button class="rounded-full bg-black px-6 py-3 text-white font-medium hover:bg-gray-800 transition-colors duration-200 shadow-lg hover:shadow-xl">
+            Explorar todas las categorías
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Productos -->
+    <div *ngIf="!loading && products.length > 0" class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-6">
     <app-product-card 
-      *ngFor="let product of products" 
-      [product]="product"
-      (addToCart)="handleAddToCart($event)">
+    *ngFor="let product of products; trackBy: trackByProductId" 
+    [product]="product"
+    (addToCart)="handleAddToCart($event)"
+    class="transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
     </app-product-card>
+    </div>
   </div>
 </section>

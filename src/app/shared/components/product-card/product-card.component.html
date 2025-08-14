@@ -1,22 +1,46 @@
-<div class="product-card">
-  <div class="product-image">
-    <img [src]="product.image" [alt]="product.name" />
-    <span class="category-badge">{{product.category}}</span>
+<div 
+  class="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-500 border-2 border-gray-400 hover:border-gray-400 cursor-pointer transform hover:scale-[1.02]"
+  (click)="onAddToCart()"
+  [class.opacity-60]="product.estado === 'Inactivo'"
+  [class.cursor-not-allowed]="product.estado === 'Inactivo'"
+>
+  <!-- Image Container with enhanced aspect ratio -->
+  <div class="relative aspect-[5/5] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 rounded-t-2xl">
+    <img 
+      [src]="getProductImage()" 
+      [alt]="getProductName()" 
+      class="absolute inset-0 h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-125 group-hover:brightness-110 filter drop-shadow-lg"
+      loading="lazy"
+    />
+    <!-- Image overlay for better contrast -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent"></div>
+    <!-- Status Badge -->
+    <div *ngIf="product.estado === 'Inactivo'" class="absolute top-2 right-2">
+      <span class="inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800">
+        No disponible
+      </span>
+    </div>
+    <!-- Add to Cart Indicator -->
+    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+      <div class="bg-white/90 backdrop-blur-sm rounded-full p-2 transform scale-75 group-hover:scale-100 transition-transform duration-300">
+        <svg class="h-5 w-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+      </div>
+    </div>
   </div>
   
-  <div class="product-content">
-    <h3 class="product-title">{{product.name}}</h3>
+  <!-- Content -->
+  <div class="p-3 flex flex-col justify-between h-18 bg-white shadow-sm">
+    <!-- Title -->
+    <h3 class="text-base font-black text-black line-clamp-2 leading-tight mb-1 group-hover:text-gray-800 transition-colors duration-300 uppercase">
+      {{getProductName()}}
+    </h3>
     
-    <div class="product-footer">
-      <div class="price-tag">
-        <span class="currency">$</span>
-        <span class="amount">{{product.price}}</span>
-      </div>
-      
-      <button class="add-button" (click)="onAddToCart()">
-        <span class="material-icons">add_shopping_cart</span>
-        <span>Agregar</span>
-      </button>
+    <!-- Price -->
+    <div class="flex items-baseline space-x-1 justify-center">
+      <span class="text-xl text-gray-600 font-black">BS</span>
+      <span class="text-xl font-black text-black group-hover:text-gray-800 transition-colors duration-300">{{getProductPrice()}}</span>
     </div>
   </div>
 </div>

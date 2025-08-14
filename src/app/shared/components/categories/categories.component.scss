@@ -1,31 +1,84 @@
-.categories-section {
-  @apply mb-4;
+.categories-container {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
 
-  .categories-grid {
-    @apply flex gap-2 overflow-x-auto pb-2 px-2;
-    -webkit-overflow-scrolling: touch;
+.categories-header {
+  margin-bottom: 1rem;
+}
 
-    .category-item {
-      @apply flex flex-col items-center justify-center 
-             p-3 rounded-xl bg-white shadow-sm
-             hover:bg-gray-50 transition-all duration-200
-             min-w-[90px] md:min-w-[100px];
-      
-      &.active {
-        @apply bg-red-50 text-red-600 shadow-md;
-        
-        .material-icons {
-          @apply text-red-500;
-        }
-      }
+.categories-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
 
-      .material-icons {
-        @apply text-2xl mb-1 text-gray-600;
-      }
+.categories-list {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
 
-      span:not(.material-icons) {
-        @apply text-xs font-medium text-gray-700;
-      }
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+
+  &:hover {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+  }
+
+  &.active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+
+    .material-icons {
+      color: white;
     }
+  }
+}
+
+.category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .material-icons {
+    font-size: 1.25rem;
+    color: #64748b;
+    transition: color 0.2s ease;
+  }
+}
+
+.category-name {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .categories-list {
+    justify-content: center;
+  }
+  
+  .category-item {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
   }
 }
